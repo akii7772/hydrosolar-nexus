@@ -11,30 +11,32 @@ st.set_page_config(
     layout="wide"
 )
 
-# ==========================================
-# SIDEBAR
-# ==========================================
 
-agua_preservada = st.slider(
-    "Água Preservada (hm³)",
-    1,
-    100,
-    20
-)
+valor_cao = 120
+
+def br(valor):
+    return f"{valor:,.0f}".replace(",", ".")
 
 # ==========================================
 # CÁLCULOS PRINCIPAIS
 # ==========================================
 
-valor_cao = 120
+investimento_padrao = 500000
 
-cao = agua_preservada * 1000
+investimento = investimento_padrao
+
+custo_painel = 1500
+energia_por_painel = 650
+
+paineis = investimento_padrao / custo_painel
+
+energia_preservada = paineis * energia_por_painel
+
+agua_preservada = energia_preservada * 0.8
+
+cao = energia_preservada / 80
 
 receita_cao = cao * valor_cao
-
-energia_preservada = agua_preservada * 500
-
-co2_ev = energia_preservada * 0.5
 
 # ==========================================
 # CABEÇALHO
@@ -47,7 +49,6 @@ st.subheader(
 )
 
 
-
 st.info("""
 A HydroSolar Nexus combina energia solar flutuante,
 agrivoltaica e um mercado de água temporário para reduzir
@@ -57,96 +58,86 @@ A água preservada gera Créditos de Água Otimizada (CAO),
 criando valor econômico para irrigantes, hidrelétricas e investidores.
 """)
 
+st.markdown("---")
+
+st.header("🚀 Como Funciona")
+
+st.markdown("""
+### Transformando água preservada em valor econômico
+
+A HydroSolar Nexus conecta geração de energia renovável,
+preservação hídrica e valorização econômica através dos
+Créditos de Água Otimizada (CAO).
+""")
+
+st.subheader("🔄 Fluxo de Geração de Valor")
+
+st.image(
+    "imagens/fluxograma.png",
+    use_container_width=True
+)
+
+st.markdown("---")
+
+st.header("📊 Indicadores Principais")
+
+col1, col2, col3, col4 = st.columns(4)
+
+with col1:
+    st.metric(
+        "💧 Água Preservada",
+        f"{br(agua_preservada)} hm³"
+    )
+
+with col2:
+    st.metric(
+        "⚡ Energia Gerada",
+        f"{br(energia_preservada)} MWh"
+    )
+
+with col3:
+    st.metric(
+        "💎 CAO Gerado",
+        f"{br(cao)}"
+    )
+
+with col4:
+    st.metric(
+        "💰 Receita Potencial",
+        f"R$ {br(receita_cao)}"
+    )
+
 # ==========================================
 # ABAS
 # ==========================================
 
-tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs([
-    "📊 Indicadores",
-    "💧 Mercado de Água",
-    "🖼️ Soluções",
-    "💰 Investidor",
-    "💎 CAO",
+tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
     "🏢 Quem Somos",
+    "🖼️ Soluções",
+    "💧 Mercado de Água",
+    "📈 Retorno Financeiro",
+    "💎 CAO",
     "📚 Engenharia"
 ])
 
-# ==========================================
-# ABA 1
-# ==========================================
-
-with tab1:
-
-    st.header("Indicadores do Sistema")
-
-    col1, col2, col3, col4 = st.columns(4)
-
-    with col1:
-        st.metric(
-            "💧 Água Preservada",
-            f"{agua_preservada} hm³"
-        )
-
-    with col2:
-        st.metric(
-            "💎 CAO Gerado",
-            f"{cao:,.0f}"
-        )
-
-    with col3:
-        st.metric(
-            "⚡ Energia Preservada",
-            f"{energia_preservada:,.0f} MWh"
-        )
-
-    with col4:
-        st.metric(
-            "💰 Receita Potencial",
-            f"R$ {receita_cao:,.0f}"
-        )
-
-    st.markdown("---")
-
-    fig = go.Figure()
-
-    fig.add_trace(
-        go.Bar(
-            x=[
-                "Água",
-                "CAO",
-                "Energia"
-            ],
-            y=[
-                agua_preservada,
-                cao/100,
-                energia_preservada/100
-            ]
-        )
-    )
-
-    fig.update_layout(
-        title="Impacto da HydroSolar Nexus"
-    )
-
-    st.plotly_chart(
-        fig,
-        use_container_width=True
-    )
 
 # ==========================================
 # ABA 2
 # ==========================================
 
-with tab2:
+with tab3:
 
     st.header("💧 Mercado de Água")
 
+    agua_formatada = f"{agua_preservada:,.0f}".replace(",", ".")
+    receita_formatada = f"{receita_cao:,.0f}".replace(",", ".")
+
     st.success(
         f"""
-        O irrigante preserva {agua_preservada} hm³ de água.
+        O irrigante preserva aproximadamente {agua_formatada} hm³ de água.
 
         Em troca recebe aproximadamente
-        R$ {receita_cao:,.0f} em CAOs.
+        R$ {receita_formatada} em CAOs.
 
         A hidrelétrica aumenta sua capacidade de geração,
         reduzindo o risco de acionamento de termelétricas.
@@ -170,7 +161,7 @@ with tab2:
 # ABA 3
 # ==========================================
 
-with tab3:
+with tab2:
 
     st.header("🖼️ Soluções Implementadas")
 
@@ -209,62 +200,70 @@ with tab4:
     st.header("💰 Simulador do Investidor")
 
     investimento = st.number_input(
-        "Quanto deseja investir? (R$)",
-        min_value=10000,
-        value=500000,
-        step=10000
+    "💰 Quanto deseja investir? (R$)",
+    min_value=10000,
+    value=500000,
+    step=10000
     )
 
     custo_painel = 1500
-
     energia_por_painel = 650
 
     paineis = investimento / custo_painel
 
-    energia_gerada = paineis * energia_por_painel
+    energia_preservada = paineis * energia_por_painel
 
-    agua_investidor = energia_gerada * 0.8
+    agua_preservada = energia_preservada * 0.8
 
-    cao_investidor = agua_investidor / 100
+    cao = energia_preservada / 80
 
-    receita_investidor = cao_investidor * valor_cao
+    receita_cao = cao * valor_cao
+
+    energia_gerada = energia_preservada
+
+    agua_investidor = agua_preservada
+
+    cao_investidor = cao
+
+    receita_investidor = receita_cao
 
     retorno = (receita_investidor / investimento) * 100
 
     col1, col2 = st.columns(2)
 
+
     with col1:
 
         st.metric(
-            "☀️ Painéis Adquiridos",
-            f"{paineis:,.0f}"
+        "☀️ Painéis Adquiridos",
+        f"{br(paineis)}"
         )
 
         st.metric(
-            "⚡ Energia Gerada",
-            f"{energia_gerada:,.0f} kWh"
+        "⚡ Energia Gerada",
+        f"{br(energia_gerada)} MWh"
         )
 
         st.metric(
             "💧 Água Preservada",
-            f"{agua_investidor:,.0f} L"
+            f"{br(agua_investidor)} hm³"
         )
 
     with col2:
 
         st.metric(
             "💎 CAO Gerado",
-            f"{cao_investidor:,.0f}"
+            f"{br(cao_investidor)}"
         )
 
         st.metric(
             "💰 Receita Estimada",
-            f"R$ {receita_investidor:,.0f}"
+            f"R$ {br(receita_investidor)}"
         )
 
         st.metric(
             "📊 Retorno",
-            f"{retorno:.1f}%"
+            f"{retorno:.1f}%".replace(".", ",")
         )
 
     if retorno > 30:
@@ -285,60 +284,6 @@ with tab4:
             "🔴 Investimento de baixo retorno"
         )
 
-    st.markdown("---")
-
-    st.subheader("📈 HydroSolar Exchange")
-
-    historico = [
-        80,
-        85,
-        90,
-        95,
-        110,
-        120,
-        135,
-        145,
-        155,
-        170,
-        180,
-        valor_cao
-    ]
-
-    meses = [
-        "Jan",
-        "Fev",
-        "Mar",
-        "Abr",
-        "Mai",
-        "Jun",
-        "Jul",
-        "Ago",
-        "Set",
-        "Out",
-        "Nov",
-        "Hoje"
-    ]
-
-    fig_cao = go.Figure()
-
-    fig_cao.add_trace(
-        go.Scatter(
-            x=meses,
-            y=historico,
-            mode="lines+markers"
-        )
-    )
-
-    fig_cao.update_layout(
-        title="Cotação do CAO",
-        yaxis_title="R$"
-    )
-
-    st.plotly_chart(
-        fig_cao,
-        use_container_width=True
-    )
-
 
 # ==========================================
 # ABA 5 - CAO
@@ -347,6 +292,16 @@ with tab4:
 with tab5:
 
     st.header("💎 Créditos de Água Otimizada (CAO)")
+
+
+    custo_painel = 1500
+    energia_por_painel = 650
+
+    paineis = investimento / custo_painel
+    energia_preservada = paineis * energia_por_painel
+    agua_preservada = energia_preservada * 0.8
+    cao = energia_preservada / 80
+    receita_cao = cao * valor_cao
 
     st.info("""
     O Crédito de Água Otimizada (CAO) é um ativo ambiental criado
@@ -376,68 +331,66 @@ with tab5:
     with col1:
         st.metric(
             "⚡ Energia Produzida",
-            f"{energia_preservada:,.0f} MWh"
+            f"{br(energia_preservada)} MWh"
         )
 
     with col2:
         st.metric(
             "💎 CAOs Gerados",
-            f"{cao_mensal:,.0f}"
+            f"{br(cao_mensal)}"
         )
 
     st.markdown("---")
 
+    st.metric(
+        "💰 Valor Atual do CAO",
+        f"R$ {br(valor_cao)}",
+        "+5%"
+    )
+
     st.subheader("📈 Cotação do CAO")
 
     historico_cao = [
-    80,
-    90,
-    100,
-    110,
-    120,
-    130,
-    145,
-    valor_mercado
-]
+        80,
+        90,
+        100,
+        110,
+        120,
+        130,
+        145,
+        valor_cao,
+    ]
 
-meses_cao = [
-    "Jan",
-    "Fev",
-    "Mar",
-    "Abr",
-    "Mai",
-    "Jun",
-    "Jul",
-    "Hoje"
-]
+    meses_cao = [
+        "Jan",
+        "Fev",
+        "Mar",
+        "Abr",
+        "Mai",
+        "Jun",
+        "Jul",
+        "Hoje"
+    ]
 
-fig = go.Figure()
+    fig_cao_hist = go.Figure()
 
-fig.add_trace(
-    go.Scatter(
-        x=meses_cao,
-        y=historico_cao,
-        mode="lines+markers",
-        name="CAO"
+    fig_cao_hist.add_trace(
+        go.Scatter(
+            x=meses_cao,
+            y=historico_cao,
+            mode="lines+markers",
+            name="CAO"
+        )
     )
-)
 
-fig.update_layout(
-    title="Evolução do Valor do CAO",
-    yaxis_title="R$"
-)
+    fig_cao_hist.update_layout(
+        title="Evolução do Valor do CAO",
+        yaxis_title="R$"
+    )
 
-st.plotly_chart(
-    fig,
-    use_container_width=True
-)
-
-    valor_mercado = 120
-
-    st.metric(
-        "Valor Atual do CAO",
-        f"R$ {valor_mercado}",
-        "+5%"
+    st.plotly_chart(
+        fig_cao_hist,
+        use_container_width=True
     )
 
     st.write("""
@@ -449,7 +402,7 @@ st.plotly_chart(
 # ABA 6 - QUEM SOMOS
 # ==========================================
 
-with tab6:
+with tab1:
 
     st.header("🏢 Quem Somos")
 
@@ -508,7 +461,7 @@ with tab6:
     """)
 
 
-with tab7:
+with tab6:
 
     st.header("📚 Fundamentação")
 
