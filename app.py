@@ -15,24 +15,12 @@ st.set_page_config(
 # SIDEBAR
 # ==========================================
 
-with st.sidebar:
-
-    st.title("🌊 HydroSolar Nexus")
-
-    st.markdown("""
-    ### Water-Energy Nexus
-
-    Plataforma de negociação hídrica e geração de valor através da preservação da água.
-    """)
-
-    st.markdown("---")
-
-    agua_preservada = st.slider(
-        "Água Preservada (hm³)",
-        1,
-        100,
-        20
-    )
+agua_preservada = st.slider(
+    "Água Preservada (hm³)",
+    1,
+    100,
+    20
+)
 
 # ==========================================
 # CÁLCULOS PRINCIPAIS
@@ -58,10 +46,7 @@ st.subheader(
     "Transformando água preservada em energia e valor econômico"
 )
 
-st.image(
-    "imagens/1.jpeg",
-    use_container_width=True
-)
+
 
 st.info("""
 A HydroSolar Nexus combina energia solar flutuante,
@@ -76,11 +61,13 @@ criando valor econômico para irrigantes, hidrelétricas e investidores.
 # ABAS
 # ==========================================
 
-tab1, tab2, tab3, tab4, tab5 = st.tabs([
+tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs([
     "📊 Indicadores",
     "💧 Mercado de Água",
     "🖼️ Soluções",
     "💰 Investidor",
+    "💎 CAO",
+    "🏢 Quem Somos",
     "📚 Engenharia"
 ])
 
@@ -352,11 +339,176 @@ with tab4:
         use_container_width=True
     )
 
+
 # ==========================================
-# ABA 5
+# ABA 5 - CAO
 # ==========================================
 
 with tab5:
+
+    st.header("💎 Créditos de Água Otimizada (CAO)")
+
+    st.info("""
+    O Crédito de Água Otimizada (CAO) é um ativo ambiental criado
+    para valorizar a preservação da água através da geração de energia renovável.
+
+    A instalação de sistemas fotovoltaicos reduz a evaporação dos reservatórios,
+    contribuindo para a manutenção do volume hídrico disponível.
+    """)
+
+    st.subheader("⚙️ Como funciona a geração de CAOs?")
+
+    st.write("""
+    A HydroSolar Nexus monitora continuamente a energia produzida pelos
+    sistemas fotovoltaicos instalados.
+
+    Para cada 80 MWh de energia produzidos, é gerado 1 Crédito de Água
+    Otimizada (CAO).
+
+    Ao final de cada mês, toda a energia gerada é contabilizada e convertida
+    automaticamente em créditos negociáveis.
+    """)
+
+    cao_mensal = energia_preservada / 80
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.metric(
+            "⚡ Energia Produzida",
+            f"{energia_preservada:,.0f} MWh"
+        )
+
+    with col2:
+        st.metric(
+            "💎 CAOs Gerados",
+            f"{cao_mensal:,.0f}"
+        )
+
+    st.markdown("---")
+
+    st.subheader("📈 Cotação do CAO")
+
+    historico_cao = [
+    80,
+    90,
+    100,
+    110,
+    120,
+    130,
+    145,
+    valor_mercado
+]
+
+meses_cao = [
+    "Jan",
+    "Fev",
+    "Mar",
+    "Abr",
+    "Mai",
+    "Jun",
+    "Jul",
+    "Hoje"
+]
+
+fig = go.Figure()
+
+fig.add_trace(
+    go.Scatter(
+        x=meses_cao,
+        y=historico_cao,
+        mode="lines+markers",
+        name="CAO"
+    )
+)
+
+fig.update_layout(
+    title="Evolução do Valor do CAO",
+    yaxis_title="R$"
+)
+
+st.plotly_chart(
+    fig,
+    use_container_width=True
+)
+
+    valor_mercado = 120
+
+    st.metric(
+        "Valor Atual do CAO",
+        f"R$ {valor_mercado}",
+        "+5%"
+    )
+
+    st.write("""
+    A cotação do CAO varia de acordo com a demanda das hidrelétricas,
+    disponibilidade hídrica e benefícios ambientais gerados.
+    """)
+
+# ==========================================
+# ABA 6 - QUEM SOMOS
+# ==========================================
+
+with tab6:
+
+    st.header("🏢 Quem Somos")
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.image("imagens/1.jpeg", use_container_width=True)
+        st.image("imagens/3.jpeg", use_container_width=True)
+
+    with col2:
+        st.image("imagens/5.jpeg", use_container_width=True)
+        st.image("imagens/7.jpeg", use_container_width=True)
+
+    st.write("""
+    A HydroSolar Nexus é uma startup focada em soluções inovadoras
+    para o setor Water-Energy Nexus, integrando geração de energia,
+    preservação hídrica e valorização econômica dos recursos naturais.
+    """)
+
+    st.subheader("☀️ Nossa atuação")
+
+    st.write("""
+    Nossa startup trabalha com a instalação de painéis fotovoltaicos
+    sobre a superfície de reservatórios e em propriedades rurais.
+
+    Essas soluções aumentam a geração de energia renovável e contribuem
+    diretamente para a redução da evaporação da água.
+    """)
+
+    st.subheader("💧 Preservação dos reservatórios")
+
+    st.write("""
+    A instalação de painéis fotovoltaicos sobre reservatórios cria uma
+    barreira física que reduz a incidência direta da radiação solar.
+
+    Como resultado, ocorre diminuição da taxa de evaporação da água,
+    contribuindo para a preservação do volume dos reservatórios.
+    """)
+
+    st.subheader("💎 Plataforma HydroSolar Exchange")
+
+    st.write("""
+    Nossa plataforma quantifica a energia produzida pelos sistemas
+    fotovoltaicos e converte os benefícios gerados em Créditos de Água
+    Otimizada (CAO).
+
+    Os proprietários que cedem parte de suas áreas para instalação dos
+    sistemas podem converter a energia produzida em CAOs e gerar uma
+    nova fonte de receita sustentável.
+    """)
+
+    st.success("""
+    Nossa missão é transformar água preservada em valor econômico,
+    conectando produtores rurais, hidrelétricas e investidores por meio
+    de um mercado inovador de créditos ambientais.
+    """)
+
+
+with tab7:
 
     st.header("📚 Fundamentação")
 
